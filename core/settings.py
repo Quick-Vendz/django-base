@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     'data',
     'server',
     'client',
+    'assignments',
+    'lessons',
+    'comments',
+    'courses',
+    'progress',
     # Third-party apps  
     'django_alpine',
     "django_htmx",

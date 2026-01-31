@@ -1,0 +1,138 @@
+{% extends 'layouts/dashboard.html' %}
+{% load markdown %}
+
+{% block content %}
+
+<div class="mb-6 space-y-4">
+    <!-- Category Filter Buttons -->
+    <div class="flex flex-wrap gap-2">
+        <a href="?{% if selected_level %}level={{ selected_level }}{% endif %}" class="inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 {% if not selected_subcategory %}bg-indigo-600 text-white hover:bg-indigo-500{% else %}bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50{% endif %}">
+            All Categories
+        </a>
+        {% for category in subcategories %}
+            <a href="?subcategory={{ category.id }}{% if selected_level %}&level={{ selected_level }}{% endif %}" class="inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 {% if selected_subcategory == category.id|stringformat:'s' %}{{ category.color }} text-white{% else %}bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50{% endif %}">
+                {{ category.name }}
+            </a>
+        {% endfor %}
+    </div>
+    
+    <!-- Level Filter Dropdown -->
+    <div class="flex items-center gap-3">
+        <label for="level-filter" class="text-sm font-medium text-gray-900">Level:</label>
+        <select id="level-filter" name="level" onchange="window.location.href='?{% if selected_subcategory %}category={{ selected_subcategory }}&{% endif %}level=' + this.value" class="rounded-md border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500">
+            <option value="" {% if not selected_level %}selected{% endif %}>All Levels</option>
+            {% for i in "1234567890123"|make_list %}
+                {% with level_num=forloop.counter|add:4 %}
+                    <option value="{{ level_num }}" {% if selected_level == level_num|stringformat:'s' %}selected{% endif %}>Level {{ level_num }}</option>
+                {% endwith %}
+            {% endfor %}
+        </select>
+        {% if selected_subcategory or selected_level %}
+            <a href="?" class="text-sm text-indigo-600 hover:text-indigo-500">Clear filters</a>
+        {% endif %}
+    </div>
+</div>
+
+    {% for category_name, category_courses in courses_by_category.items %}
+        {% if category_courses %}
+
+        <div class="flex items-center my-6">
+            <div aria-hidden="true" class="w-full border-t border-gray-300"></div>
+                <div class="relative flex justify-center">
+                    <span class="px-2 text-sm text-gray-500 whitespace-nowrap">{{ category_name }}</span>
+                </div>
+            <div aria-hidden="true" class="w-full border-t border-gray-300"></div>
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-4">
+            {% for course in category_courses %}
+                {% if course.is_published %}
+                    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+
+                        <!-- header -->
+                        <a href="{% url 'course_detail' course.slug %}"class="block border-b border-gray-200 px-4 py-5 sm:px-6  bg-{{ course.subcategory.color }}-600">
+                            <div class="-mt-2 -ml-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+                                <div class="mt-2 ml-4">
+                                    <h3 class="font-semibold text-white text-xl">{{ course.title }}</h3>
+                                    <h3 class="text-base font-semibold text-white">Level {{ course.level }}</h3>
+                                </div>
+                                <div class="mt-2 ml-4 shrink-0">
+                                    <button type="button" class="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-{{ course.subcategory.color }}-600">Edit</button>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- content -->
+                        <div class="px-4 py-5 sm:p-6">
+                            {{ course.blurb|markdown }}
+                        </div>
+
+                        <!-- footer -->
+                        <div class="px-4 py-4 sm:px-6 flex items-center justify-end space-x-3 bg-gray-50">
+                            <button type="button" class="rounded-full bg-{{ course.subcategory.color }}-600 p-2 text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in{{ course.subcategory.color }}digo-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+                                </svg>
+                            </button>
+                            <button type="button" class="rounded-full bg-{{ course.subcategory.color }}-600 p-2 text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-{{ course.subcategory.color }}-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                                </svg>
+                            </button>
+                            <button type="button" class="rounded-full bg-{{ course.subcategory.color }}-600 p-2 text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-{{ course.subcategory.color }}-600">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                {% elif request.user.is_staff %}
+                    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm opacity-50">
+
+                        <!-- header -->
+                        <a href="{% url 'course_detail' course.slug %}" class=" block border-b border-gray-200 px-4 py-5 sm:px-6  bg-{{ course.subcategory.color }}-600">
+                            <div class="-mt-2 -ml-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+                                <div class="mt-2 ml-4">
+                                    <h3 class="font-semibold text-white text-xl">{{ course.title }}</h3>
+                                    <h3 class="text-base font-semibold text-white">Level {{ course.level }}</h3>
+                                </div>
+                                <div class="mt-2 ml-4 shrink-0">
+                                    <button type="button" class="relative inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-{{ course.subcategory.color }}-600">Edit</button>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- content -->
+                        <div class="px-4 py-5 sm:p-6">
+                            {{  course.blurb|markdown }}
+                        </div>
+
+                        <!-- footer -->
+                        <div class="px-4 py-4 sm:px-6 flex items-center justify-end space-x-3 bg-gray-50">
+                            <button type="button" class="rounded-full bg-{{ course.subcategory.color }}-600 p-2 text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-in{{ course.subcategory.color }}digo-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+                                </svg>
+                            </button>
+                            <button type="button" class="rounded-full bg-{{ course.subcategory.color }}-600 p-2 text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-{{ course.subcategory.color }}-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776" />
+                                </svg>
+                            </button>
+                            <button type="button" class="rounded-full bg-{{ course.subcategory.color }}-600 p-2 text-white shadow-xs hover:bg-{{ course.subcategory.color }}-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-{{ course.subcategory.color }}-600">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,61 @@
+You are generating a course description for my LMS. Follow these rules exactly:
+
+1. Follow the template structure below with zero deviations.
+2. Use the New Zealand Curriculum (NZC) or NCEA subject progression as the content source.
+3. Match the tone, depth, and structure of my Mathematics Level 10 example.
+4. Use two short paragraphs for the Course Description.
+5. Include the “What Students Will Learn” section with 3–5 topic areas, each with 3–6 bullet points.
+6. Include a “Course Outcomes” section with 4–6 bullet points.
+7. Do not add extra sections, headings, commentary, or explanations.
+8. Do not shorten or expand the structure — follow the template exactly.
+9. Replace all placeholders with content for the specific subject and level provided.
+10. Ensure all content is age‑appropriate by following the custom level mapping:
+
+   Level 5 = Year 1
+   Level 6 = Year 2
+   Level 7 = Year 3
+   Level 8 = Year 4
+   Level 9 = Year 5
+   Level 10 = Year 6
+   Level 11 = Year 7
+   Level 12 = Year 8
+   Level 13 = Year 9
+   Level 14 = Year 10
+   Level 15 = Year 11 (NCEA Level 1)
+   Level 16 = Year 12 (NCEA Level 2)
+   Level 17 = Year 13 (NCEA Level 3)
+
+TEMPLATE TO FOLLOW:
+
+# {SUBJECT} — Level {LEVEL}
+
+## Course Description
+{Two short paragraphs describing the course content, purpose, and learning focus.}
+
+## What Students Will Learn
+
+### {Topic Area 1}
+- {Bullet point}
+- {Bullet point}
+- {Bullet point}
+
+### {Topic Area 2}
+- {Bullet point}
+- {Bullet point}
+- {Bullet point}
+
+### {Topic Area 3}
+- {Bullet point}
+- {Bullet point}
+- {Bullet point}
+
+### {Topic Area 4 (optional)}
+- {Bullet point}
+- {Bullet point}
+- {Bullet point}
+
+## Course Outcomes
+- {Outcome}
+- {Outcome}
+- {Outcome}
+- {Outcome}

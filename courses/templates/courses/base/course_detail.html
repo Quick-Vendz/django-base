@@ -1,0 +1,25 @@
+{% extends 'layouts/dashboard.html' %}
+{% load markdown %}
+
+{% block content %}
+
+<div class="max-w-5xl m-auto divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+    <!-- header -->
+    <div class="px-4 py-5 sm:px-10 bg-{{ course.subcategory.color }}-600">
+        <h1 class="text-3xl font-bold text-white">{{ course.title }}</h1>
+        <h1 class="text-2xl font-bold text-white">Level – {{ course.level}}</h1>
+    </div>
+    <!-- content -->
+    <div class="px-4 py-4 sm:px-10">
+        {{ course.description|markdown }}
+    </div>
+    <!-- footer -->
+    <!-- <div class="px-4 py-4 sm:px-6">
+
+    </div> -->
+</div>
+
+
+
+
+{% endblock %}

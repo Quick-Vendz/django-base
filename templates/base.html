@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     {% htmx_script %}
     <script src="{% static 'js/alpine.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
     <title>Document</title>
 </head>
-<body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
-    <a href="{% url 'client-home' %}">Client</a>
-    <a href="{% url 'server-home' %}">Server</a>
+<body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+    class="bg-neutral-200">
+    <!-- <a href="{% url 'client-home' %}">Client</a>
+    <a href="{% url 'server-home' %}">Server</a> -->
 
     {% block layout %}
     {% endblock %}
