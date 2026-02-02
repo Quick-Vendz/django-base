@@ -23,6 +23,8 @@ urlpatterns = [
     path('server/', include('server.urls')),
     path('client/', include('client.urls')),
     path('courses/', include('courses.urls')),
+    path('standards/', include('standards.urls')),
+    path('nzc/', include('nzc.urls')),
 ]
 
 if settings.DEBUG:

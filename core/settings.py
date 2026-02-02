@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Local apps
     'core',
     'accounts',
+    'standards',
     'data',
     'server',
     'client',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'comments',
     'courses',
     'progress',
+    'nzc',
     # Third-party apps  
     'django_alpine',
     "django_htmx",
